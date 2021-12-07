@@ -1,0 +1,54 @@
+version: "3.1"
+services:
+
+    tcc_mariadb:
+      image: mariadb:10.4
+      container_name: tcc_mariadb
+      restart: unless-stopped
+      tty: true
+      volumes:
+        - database:/var/lib/mysql/
+      environment:
+        - MYSQL_ROOT_PASSWORD=root-pass
+        - MYSQL_DATABASE=catalog
+        - MYSQL_USER=tccuni
+        - MYSQL_PASSWORD=tcc2021
+      ports:
+        - "8083:3306"
+      networks:
+        - api
+
+    tcc_nginx:
+      image: nginx:alpine
+      container_name: tcc_nginx
+      restart: unless-stopped
+      tty: true
+      working_dir: /application
+      volumes:
+        - ./src:/application
+        - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+        - "9090:80"
+      links:
+        - tcc_mariadb
+      networks:
+        - api
+
+    tcc_php:
+      build: .
+      container_name: tcc_php
+      restart: unless-stopped
+      tty: true
+      working_dir: /application
+      volumes:
+        - ./src:/application
+      networks:
+        - api
+
+networks:
+  api:
+    driver: bridge
+
+volumes:
+  database:
+    driver: local
