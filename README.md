@@ -1,2 +1,1 @@
-# tcc-catalog-service
-Projeto feito para exemplificar o uso de um microsserviço de gerenciamento de catálogo. TCC Unicarioca 2021
+Graduation completion project in Computer Science, 2021. This project was built to exemplify the use of the api gateway with the help of a microservice.
